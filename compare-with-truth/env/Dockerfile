@@ -7,8 +7,11 @@ RUN pip install requests
 
 RUN pip install spikeinterface==0.92.0
 
-RUN pip install mearec
 RUN pip install pynwb
 RUN git clone https://github.com/catalystneuro/nwb-conversion-tools /nwb-conversion-tools \
     && cd /nwb-conversion-tools \
+    && pip install .
+
+RUN git clone https://github.com/flatironinstitute/spikeforest2 /spikeforest2 \
+    && cd /spikeforest2 \
     && pip install .
