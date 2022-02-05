@@ -24,8 +24,11 @@ def main():
     SC = SortingComparison(sorting_true, sorting, delta_tp=30)
     df = _get_comparison_data_frame(comparison=SC)
     obj = df.transpose().to_dict()
+    obj2 = []
+    for k in obj.keys():
+        obj2.append(obj[k])
     with open(output_comparison_path, 'w') as f:
-        json.dump(obj, f, indent=4)
+        json.dump(obj2, f, indent=4)
 
 def _get_comparison_data_frame(*, comparison):
     import pandas as pd
@@ -83,10 +86,10 @@ def _get_comparison_data_frame(*, comparison):
         pname = prop['name']
         fields.append(pname)
     df = df[fields]
-    df['accuracy'] = df['accuracy'].map('{:,.4f}'.format)
+    # df['accuracy'] = df['accuracy'].map('{:,.4f}'.format)
     # df['Best match'] = df['Accuracy'].map('{:,.2f}'.format)
-    df['f_n'] = df['f_n'].map('{:,.4f}'.format)
-    df['f_p'] = df['f_p'].map('{:,.4f}'.format)
+    # df['f_n'] = df['f_n'].map('{:,.4f}'.format)
+    # df['f_p'] = df['f_p'].map('{:,.4f}'.format)
     return df
 
 

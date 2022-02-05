@@ -15,3 +15,7 @@ RUN git clone https://github.com/catalystneuro/nwb-conversion-tools /nwb-convers
 RUN git clone https://github.com/flatironinstitute/spikeforest2 /spikeforest2 \
     && cd /spikeforest2 \
     && pip install .
+# old kachery is needed by spikeforest2_utils -- but we're going to move away from that package - this is temporary
+RUN pip install kachery
+
+RUN pip install packaging
