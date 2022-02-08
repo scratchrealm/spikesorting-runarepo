@@ -1,0 +1,28 @@
+#!/usr/bin/env python3
+
+import os
+import json
+from spikeinterface import extractors as se
+from spikeinterface import sorters as ss
+
+def main():
+    input_recording_nwb_path = os.environ['INPUT_RECORDING_NWB']
+    input_sorting_params_path = os.environ['INPUT_SORTING_PARAMS']
+    output_dir = os.environ['OUTPUT_DIR']
+    output_sorting_npz_path = f'{output_dir}/sorting.npz'
+
+    with open(input_sorting_params_path, 'r') as f:
+        sorting_params = json.load(f)
+    print('SORTING PARAMS:')
+    print(json.dumps(sorting_params, indent=4))
+
+    recording = se.read_nwb(input_recording_nwb_path)[0]
+    sorting = ss.run_tridesclous(
+        recording=recording, output_folder=output_dir,
+        verbose=True, raise_error=True,
+        **sorting_params
+    )
+    se.NpzSortingExtractor.write_sorting(sorting=sorting, save_path=output_sorting_npz_path)
+
+if __name__ == '__main__':
+    main()
