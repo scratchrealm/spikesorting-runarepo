@@ -8,5 +8,6 @@ RUN pip install pynwb
 RUN git clone https://github.com/catalystneuro/nwb-conversion-tools /nwb-conversion-tools \
     && cd /nwb-conversion-tools \
     && pip install .
+RUN pip install packaging
 
 RUN pip install sklearn
