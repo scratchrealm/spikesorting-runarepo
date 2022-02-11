@@ -21,16 +21,18 @@ def main():
     os.makedirs(output_dir)
 
     print('Extracting waveforms')
+    recording.annotate(is_filtered=True)
     waveform_extractor = si.extract_waveforms(recording, sorting, folder=output_dir + '/waveforms',
                        ms_before=1, ms_after=1, max_spikes_per_unit=500)
     print('Computing snrs')
     snrs = st.compute_snrs(waveform_extractor)
+    print(snrs)
 
     unit_metrics = []
     for unit_id in sorting.get_unit_ids():
         unit_metrics.append({
-            'unitId': unit_id,
-            'snr': snrs[unit_id]
+            'unitId': int(unit_id),
+            'snr': float(snrs[unit_id])
         })
 
     output_sorting_metrics = {
