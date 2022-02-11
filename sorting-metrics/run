@@ -1,0 +1,45 @@
+#!/usr/bin/env python3
+
+import os
+import json
+import spikeinterface.extractors as se
+import spikeinterface.toolkit as st
+import spikeinterface as si
+
+def main():
+    print('Sorting metrics')
+    input_sorting_npz_path = os.environ['INPUT_SORTING_NPZ']
+    input_recording_nwb_path = os.environ['INPUT_RECORDING_NWB']
+    output_dir = os.environ['OUTPUT_DIR']
+    output_sorting_metrics_path = f'{output_dir}/sorting_metrics.json'
+
+    print('Loading sorting')
+    sorting = se.NpzSortingExtractor(input_sorting_npz_path)
+    print('Loading recording')
+    recording = se.read_nwb(input_recording_nwb_path)[0]
+
+    os.makedirs(output_dir)
+
+    print('Extracting waveforms')
+    waveform_extractor = si.extract_waveforms(recording, sorting, folder=output_dir + '/waveforms',
+                       ms_before=1, ms_after=1, max_spikes_per_unit=500)
+    print('Computing snrs')
+    snrs = st.compute_snrs(waveform_extractor)
+
+    unit_metrics = []
+    for unit_id in sorting.get_unit_ids():
+        unit_metrics.append({
+            'unitId': unit_id,
+            'snr': snrs[unit_id]
+        })
+
+    output_sorting_metrics = {
+        'unit_metrics': unit_metrics
+    }
+
+    print(f'Writing {output_sorting_metrics_path}')
+    with open(output_sorting_metrics_path, 'w') as f:
+        json.dump(output_sorting_metrics, f, indent=4)
+
+if __name__ == '__main__':
+    main()
