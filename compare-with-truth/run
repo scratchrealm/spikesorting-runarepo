@@ -8,6 +8,7 @@ from spikeinterface.core.old_api_utils import NewToOldSorting
 from spikeforest2_utils import SortingComparison
 
 def main():
+    print('Comparison with truth')
     input_sorting_npz_path = os.environ['INPUT_SORTING_NPZ']
     input_sorting_true_npz_path = os.environ['INPUT_SORTING_TRUE_NPZ']
     output_dir = os.environ['OUTPUT_DIR']
@@ -27,6 +28,7 @@ def main():
     obj2 = []
     for k in obj.keys():
         obj2.append(obj[k])
+    print(f'Writing {output_comparison_path}')
     with open(output_comparison_path, 'w') as f:
         json.dump(obj2, f, indent=4)
 
