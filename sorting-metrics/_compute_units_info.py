@@ -1,10 +1,7 @@
-import json
-import hither_sf as hither
 import numpy as np
 
 def _compute_units_info(*, recording, sorting, channel_ids=[], unit_ids=[]):
     import spikeextractors as se
-    import spiketoolkit as st
 
     if (channel_ids) and (len(channel_ids) > 0):
         recording = se.SubRecordingExtractor(parent_recording=recording, channel_ids=channel_ids)
