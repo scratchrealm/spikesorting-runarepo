@@ -5,6 +5,7 @@ import json
 import spikeinterface.extractors as se
 import spikeinterface.toolkit as st
 import spikeinterface as si
+from _compute_units_info import _compute_units_info
 
 def main():
     print('Sorting metrics')
@@ -20,18 +21,24 @@ def main():
 
     os.makedirs(output_dir)
 
-    print('Extracting waveforms')
-    waveform_extractor = si.extract_waveforms(recording, sorting, folder=output_dir + '/waveforms',
-                       ms_before=1, ms_after=1, max_spikes_per_unit=500)
-    print('Computing snrs')
-    snrs = st.compute_snrs(waveform_extractor)
+    # Not using spikeinterface for now because it somehow produces much lower values for snr from what I would expect
+    # print('Extracting waveforms')
+    # recording.annotate(is_filtered=True)
+    # waveform_extractor = si.extract_waveforms(recording, sorting, folder=output_dir + '/waveforms',
+    #                    ms_before=1, ms_after=1, max_spikes_per_unit=500)
+    # print('Computing snrs')
+    # snrs = st.compute_snrs(waveform_extractor)
 
-    unit_metrics = []
-    for unit_id in sorting.get_unit_ids():
-        unit_metrics.append({
-            'unitId': unit_id,
-            'snr': snrs[unit_id]
-        })
+    # unit_metrics = []
+    # for unit_id in sorting.get_unit_ids():
+    #     unit_metrics.append({
+    #         'unitId': int(unit_id),
+    #         'snr': float(snrs[unit_id])
+    #     })
+
+    # Not using spikeinterface for now because it somehow produces much lower values for snr from what I would expect
+    # For now using code from old spikeforest
+    unit_metrics = _compute_units_info(recording=recording, sorting=sorting)
 
     output_sorting_metrics = {
         'unit_metrics': unit_metrics
